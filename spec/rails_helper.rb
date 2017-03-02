@@ -9,6 +9,8 @@ require 'rspec/rails'
 require "rspec/autorun"
 require "capybara/rspec"
 require "factory_girl"
+require "database_cleaner"
+require 'rspec/active_model/mocks'
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
@@ -62,3 +64,5 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+  #The application’s host should be just a host without a subdomain
+  Capybara.app_host = "http://example.com"

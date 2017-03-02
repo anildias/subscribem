@@ -20,10 +20,13 @@ Gem::Specification.new do |s|
   s.add_dependency "bcrypt-ruby", "3.1.5"
   s.add_dependency "warden", "1.2.7"
   s.add_dependency "dynamic_form", "1.1.4"
+  s.add_dependency "pg"
+  s.add_dependency "apartment"
 
-  s.add_development_dependency "sqlite3"
   s.add_development_dependency 'rspec-rails', '3.5'
   s.add_development_dependency 'capybara', '2.7.1'
-  s.add_development_dependency "factory_girl", '4.8.0' 
+  s.add_development_dependency "factory_girl", '4.8.0'
+  s.add_development_dependency 'rspec-activemodel-mocks'
+  s.add_development_dependency "database_cleaner" 
 
 end

@@ -3,7 +3,7 @@ require "rails_helper"
 feature "User sign in" do
 	extend SubdomainHelpers
 
-	let!(:account) { FactoryGirl.create(:account) }
+	let!(:account) { FactoryGirl.create(:account_with_schema) }
 	let(:sign_in_url) { "http://#{account.subdomain}.example.com/sign_in" }
 	let(:root_url) { "http://#{account.subdomain}.example.com/" }
 
@@ -41,7 +41,7 @@ feature "User sign in" do
 		end
 
 		scenario "cannot sign in if not a part of this subdomain" do
-			other_account = FactoryGirl.create(:account)
+			other_account = FactoryGirl.create(:account_with_schema)
 			visit subscribem.root_url(:subdomain => account.subdomain)
 			page.current_url.should == sign_in_url
 			page.should have_content("Please sign in.")

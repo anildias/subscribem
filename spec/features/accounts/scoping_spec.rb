@@ -1,23 +1,31 @@
 require 'rails_helper'
 include Warden::Test::Helpers
 
-$count = 0
 feature "Account Scoping" do
-	let!(:account_a) { FactoryGirl.create(:account) }
-	let!(:account_b) { FactoryGirl.create(:account) }
-	let(:root_url) { "http://#{account.subdomain}.example.com/" }
+	let!(:account_a) { FactoryGirl.create(:account_with_schema) }
+	let!(:account_b) { FactoryGirl.create(:account_with_schema) }
 
 	before do
-		Thing.create(name: "Account A", account: account_a)
-		Thing.create(name: "Account B", account: account_b)
+		Apartment::Database.switch(account_a.subdomain)
+		Thing.create(:name => "Account A's Thing")
+		Apartment::Database.switch(account_b.subdomain)
+		Thing.create(:name => "Account B's Thing")
+		Apartment::Database.reset
 	end
 
+
 	scenario "should display only Account A Things" do
-		# login_as(account_a, scope: account_a.owner)
 		sign_in_as(:user => account_a.owner, :account => account_a)
-		visit "/things"
-		page.should have_content("Account A Things")
-		page.should_not have_content("Account B Things")
+		visit main_app.things_url(:subdomain => account_a.subdomain)
+		page.should have_content("Account A's Thing")
+		page.should_not have_content("Account B's Thing")
+	end
+
+	scenario "should display only Account B Things" do
+		sign_in_as(:user => account_b.owner, :account => account_b)
+		visit main_app.things_url(:subdomain => account_b.subdomain)
+		page.should have_content("Account B's Thing")
+		page.should_not have_content("Account A's Thing")
 	end
 
 end
